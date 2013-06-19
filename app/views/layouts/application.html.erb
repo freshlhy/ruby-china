@@ -1,0 +1,119 @@
+<!--
+      ____        __             ________    _
+     / __ \__  __/ /_  __  __   / ____/ /_  (_)___  ____ _
+    / /_/ / / / / __ \/ / / /  / /   / __ \/ / __ \/ __ `/
+   / _, _/ /_/ / /_/ / /_/ /  / /___/ / / / / / / / /_/ /
+  /_/ |_|\__,_/_.___/\__, /   \____/_/ /_/_/_/ /_/\__,_/
+                    /____/
+  ========================================================
+                                          ruby-china.org
+        
+  App Environments:
+  --------------------------------------------------------
+  Ruby:  <%= RUBY_VERSION %><%= "-p#{RUBY_PATCHLEVEL}" if defined? RUBY_PATCHLEVEL %>
+  Rails: <%= Rails.version %>
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <%= render_page_title %>
+  <%= stylesheet_link_tag "front" %>
+  <%= controller_stylesheet_link_tag %>
+  <%= yield :styles %>
+  <% if mobile? %>
+    <%= stylesheet_link_tag "mobile" %>
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta content='True' name='HandheldFriendly' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="apple-touch-icon-precomposed" href="<%= asset_path("ios-icon.png") %>" />
+  <% end %>
+  <meta name="keywords" content="<%= @meta_keywords %>" />
+  <meta name="description" content="<%= @meta_description %>" />
+  <meta charset='utf-8' />
+  <link rel="shortcut icon" href="<%= asset_path("big_logo.png") %>" />
+  <%= raw SiteConfig.custom_head_html %>
+  <%= csrf_meta_tag %>
+  <%= auto_discovery_link_tag(:rss,feed_topics_url,:title => '订阅最新帖') %>
+
+  <%= yield :node_feed_link %>
+</head>
+<body data-offset="50">
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <h3>
+          <a href="/"><%= image_tag("text_logo.png", :style => "width:123px;height:29px;") %></a>
+        </h3>
+        <%= render_list :class => "nav" do |li|
+           li << link_to(t("menu.topics"), topics_path)
+           li << link_to(t("menu.wiki"), pages_path )
+           li << link_to(t("menu.sites"), sites_path ) if !mobile?
+           li << link_to(t("menu.users"), users_path) if !mobile?
+        end %>
+        <form action="/search" class="navbar-search pull-left" method="get">
+          <input type="text" name="q" class="search-query span3" value="<%= params[:q] %>" placeholder="<%= t("common.search") %>" />
+        </form>
+        <%= render "common/user_nav" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <% if !controller_name.in?(["users"]) %>
+      <div class="hidden-phone" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+        <%= render_breadcrumb %>
+      </div>
+      <div class="feed_link hidden-phone">
+        <% if not mobile? %>
+          <%= link_to(raw("<span class='icon icons_rss'></span> Feed"), feed_topics_url, :title => t("topics.subscribe_with_rss", :name => Setting.app_name), :class => "feed") %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= notice_message %>
+    <div id="main" class="container-fluid">
+      <%= yield %>
+    </div>
+  </div>
+
+  <% if not mobile? %>
+  <a class="go_top" href="#"><i class="icon icons_go_top"></i></a>
+  <footer class="footer">
+    <div class="container">
+      <%= raw SiteConfig.footer_html %> 
+    </div>
+  </footer>
+  <% end %>
+
+  <%= javascript_include_tag "app" %>
+  <%= controller_javascript_include_tag %>
+  <% if mobile? %>
+    <script type="text/javascript">
+    app_mobile = true;
+    $('body').animate({ scrollTop: -1 },0);
+    </script>
+  <% end %>
+  <script type="text/javascript" charset="utf-8">
+    ROOT_URL = "<%= root_url %>";
+    FAYE_SERVER_URL = "<%= Setting.faye_server %>";
+    <% if current_user %>
+      CURRENT_USER_ACCESS_TOKEN = "<%= current_user.temp_access_token %>";
+    <% end %>
+  </script>
+  <%= yield :scripts %>
+  <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '<%= Setting.google_analytics_key %>']);
+      _gaq.push(['_setSiteSpeedSampleRate', 100]);
+      _gaq.push(['_trackPageview']);
+
+      <%= Garelic::Timing %>
+
+      (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+  </script>
+</body>
+</html>

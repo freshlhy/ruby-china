@@ -1,0 +1,26 @@
+<%= render "menu" %>
+
+<div class="content">
+  <%= render "info" %>
+
+  <div class="recent_topics box">
+    <h2 class="title">备受大家喜欢的帖子</h2>
+    <ul>
+      <% @topics.each do |item| %>
+        <li>
+          <span class="node"><%= render_node_name(item.node_name,item.node_id) %></span>
+          <%= render_topic_title(item) %>
+          <span class="info pull-right"><%= item.likes_count %> 人喜欢, <%= item.replies_count %> 条回复</span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="box">
+    <h2 class="title"><%= t("topics.recent_replies")%></h2>
+    <%= render "replies", :replies => @replies %>
+  </div>
+
+
+
+</div>
+<%= render "sidebar", :user => @user %>

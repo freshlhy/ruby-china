@@ -1,0 +1,209 @@
+/*
+ *= require bootstrap
+ *= require wikistyle
+ *= require jquery.chosen
+ *= require highlight
+ *= require social-share-button
+ *= require jquery.atwho
+ *= require_tree ./sprites/
+ *= require_self
+ */
+html {
+  width: 100%;
+  height: 100%;
+  background:#eee image-url('bg.png') bottom left repeat;
+}
+body { background:none;}
+
+code { background:none; }
+
+
+.navbar-fixed-top {
+  position:static;right:0;left:0;margin-bottom:20px;
+  .badge-inverse { background:#666;}
+
+  .search-query {
+    margin-bottom: 0;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+  }
+  .brand {width:60px;}
+  .badge {
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding: 2px 6px;
+  }
+  .badge-error { background:#C43C35; }
+  h3 {
+    margin:0; padding:0; margin-top:2px; margin-right:10px;
+    width:123px; float:left;
+    a {
+      padding:0; margin:0; margin-top:5px;
+      width:130px;
+      &:hover { background:none;}
+    }
+  }
+}
+
+.breadcrumb {
+  color:#999; border:0px;
+  background:#FFF;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0px 2px rgba(0,0,0,.05);
+  -moz-box-shadow: 0 0px 2px rgba(0,0,0,.1);
+  box-shadow: 0 0px 2px rgba(0,0,0,.05);
+}
+
+
+.container { width:960px; }
+.container-fluid { padding:0; }
+.container-fluid > .sidebar {
+  position:absolute;
+  left:auto;
+  right:0;
+  top:0;
+  width: 240px;
+}
+
+.container-fluid > .content {
+  margin-left:0;
+  margin-right: 260px;
+}
+
+fieldset { margin-bottom:0;}
+fieldset legend { font-size:16px; font-weight:bold;}
+
+.pagination { margin:0; margin-top:10px; }
+
+a.label:hover { text-decoration: none; color:#FFF;}
+
+abbr[title] { border:0; cursor:default; }
+
+form {
+  margin-bottom:0px;
+}
+.form-actions {
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+  margin-bottom:0px;
+}
+
+.box {
+  background-color: #fff;
+  padding:10px;
+  margin: 0 0 20px 0; /* negative indent the amount of the padding to maintain the grid system */
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-box-shadow: 0 0px 2px rgba(0,0,0,.05);
+  -moz-box-shadow: 0 0px 2px rgba(0,0,0,.1);
+  box-shadow: 0 0px 2px rgba(0,0,0,.05);
+  h2.title {
+    font-size: 12px;
+    margin:0 -10px; padding:0 10px; margin-bottom:8px;
+    color:#999; line-height:100%;
+    border-bottom:1px solid #ddd; padding-bottom:8px;
+  }
+}
+
+.box_gray {
+  background:#F5F5F5;
+}
+
+
+.footer {
+  border-top:0;
+  min-width: 940px;
+  margin-bottom:30px;
+  margin-top:0px;
+  padding:0;
+  text-shadow: 0 1px 0 #fff;
+}
+.footer p {
+  margin:3px 0;
+  color: #555;
+}
+#main { position:relative;}
+#main h1 { font-size:14px; line-height:26px; font-weight:bold; text-align:right; color:#333; margin-bottom:10px; }
+
+.topbar { position: static; margin-bottom:20px;}
+
+textarea.long { width:670px;}
+textarea.span16 { width:910px;}
+.input-xxlarge, input.xxlarge, textarea.xxlarge, select.xxlarge { width:510px;}
+
+div.field, div.actions {
+  margin-bottom: 10px;
+}
+div.field .hint { font-size:12px; color:#999;}
+
+.field_with_errors {
+  display:inline;
+  color:#b16125;
+}
+
+.alert-message { margin-bottom:8px;}
+
+.icon {
+  display:inline-block;
+  transition-property: background-position;
+  transition-duration: 0.5s;
+  -moz-transition-property: background-position; /* Firefox 4 */
+  -moz-transition-duration: 0.5s; /* Firefox 4 */
+  -webkit-transition-property: background-position; /* Safari and Chrome */
+  -webkit-transition-duration: 0.5s; /* Safari and Chrome */
+}
+.icons_go_top { width: 16px; height: 16px; background: url(image-path('go_top.png'));}
+.icons_rss { width: 16px; height: 16px; background: url(image-path('rss.png')); }
+
+@media only screen and (-webkit-device-pixel-ratio: 2){ 
+	.icons_rss { background: url(image-path('rss@2x.png')); background-size:16px 16px; }
+	.icons_go_top { background: url(image-path('go_top@2x.png')); background-size:16px 16px; }
+}
+
+.simple_form {
+  label.required {
+    abbr { color:#c00;}
+  }
+}
+
+/* bootstrap puts .clearfix inside form, doesn't make much sense */
+.clearfix {
+  margin-bottom: 18px;
+  zoom: 1;
+  &:before, &:after {
+    display: table;
+    content: "";
+    zoom: 1;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+#error_page {
+  padding:60px;
+  h1 { font-size:600%; color:#aaa; margin-bottom:100px;}
+  p { font-size:16px; }
+}
+
+.no_result { text-align:center; color:#999; }
+
+.go_top {
+  background: #FFF;
+  text-align: center;
+  border:1px solid #eee;
+  display:none;
+  height:20px; width:24px;
+  padding-top:4px; overflow:hidden;
+  border-radius:6px;
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+}
+
+img.emoji { width:20px; height:20px; }
