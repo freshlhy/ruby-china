@@ -16,25 +16,25 @@ class UsersController < ApplicationController
     without_node_ids = [21,22,23,31,49,51,57,25]
     @topics = @user.topics.without_node_ids(without_node_ids).high_likes.limit(20)
     @replies = @user.replies.only(:topic_id,:body_html,:created_at).recent.includes(:topic).limit(10)
-    set_seo_meta("#{@user.login}")
-    drop_breadcrumb(@user.login)
+    set_seo_meta("#{@user.nickname}")
+    drop_breadcrumb(@user.nickname)
   end
 
   def topics
     @topics = @user.topics.recent.paginate(:page => params[:page], :per_page => 30)
-    drop_breadcrumb(@user.login, user_path(@user.login))
+    drop_breadcrumb(@user.nickname, user_path(@user.nickname))
     drop_breadcrumb(t("topics.title"))
   end
 
   def favorites
     @topics = Topic.where(:_id.in => @user.favorite_topic_ids).paginate(:page => params[:page], :per_page => 30)
-    drop_breadcrumb(@user.login, user_path(@user.login))
+    drop_breadcrumb(@user.nickname, user_path(@user.nickname))
     drop_breadcrumb(t("users.menu.favorites"))
   end
   
   def notes
     @notes = @user.notes.published.recent.paginate(:page => params[:page], :per_page => 30)
-    drop_breadcrumb(@user.login, user_path(@user.login))
+    drop_breadcrumb(@user.nickname, user_path(@user.nickname))
     drop_breadcrumb(t("users.menu.notes"))
   end
 
@@ -73,13 +73,13 @@ class UsersController < ApplicationController
 
   protected
   def find_user
-    # 处理 login 有大写字母的情况
+    # 处理 nickname 有大写字母的情况
     if params[:id] != params[:id].downcase
       redirect_to request.path.downcase, :status => 301
       return
     end
 
-    @user = User.where(:login => /^#{params[:id]}$/i).first
+    @user = User.where(:nickname => /^#{params[:id]}$/i).first
     render_404 if @user.nil?
   end
 

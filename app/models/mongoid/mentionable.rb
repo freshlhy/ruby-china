@@ -18,18 +18,18 @@ module Mongoid
       User.where(:_id.in => mentioned_user_ids)
     end
 
-    def mentioned_user_logins
+    def mentioned_user_nicknames
       # 用于作为缓存 key
       ids_md5 = Digest::MD5.hexdigest(self.mentioned_user_ids.to_s)
-      Rails.cache.fetch("#{self.class.name.downcase}:#{self.id}:mentioned_user_logins:#{ids_md5}") do
-        User.where(:_id.in => self.mentioned_user_ids).only(:login).map(&:login)
+      Rails.cache.fetch("#{self.class.name.downcase}:#{self.id}:mentioned_user_nicknames:#{ids_md5}") do
+        User.where(:_id.in => self.mentioned_user_ids).only(:nickname).map(&:nickname)
       end
     end
 
     def extract_mentioned_users
-      logins = body.scan(/@(\w{3,20})/).flatten
-      if logins.any?
-        self.mentioned_user_ids = User.where(:login => /^(#{logins.join('|')})$/i, :_id.ne => user.id).limit(5).only(:_id).map(&:_id).to_a
+      nicknames = body.scan(/@(\w{3,20})/).flatten
+      if nicknames.any?
+        self.mentioned_user_ids = User.where(:nickname => /^(#{nicknames.join('|')})$/i, :_id.ne => user.id).limit(5).only(:_id).map(&:_id).to_a
       end
     end
 

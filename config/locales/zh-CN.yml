@@ -7,13 +7,14 @@
       page: Wiki
     attributes:
       user:
-        name: "名字"
-        login: "用户名"
-        email: "Email"
-        email_public: "公开 Email"
+        nickname: "昵称"
+        email: "邮箱"
+        email_public: "公开 邮箱"
         avatar: "头像"
         location: "城市"
         bio: "个人介绍"
+        qzone: "QQ空间"
+        weibo: "新浪微博"
         password: "密码"
         password_confirmation: "确认密码"
         website: "个人主页"
@@ -21,7 +22,6 @@
         tagline: "签名"
         state: "状态"
         verified: "信任用户"
-        company: "公司"
         remember_me: 记住登陆状态
         current_password: 旧密码
       topic:

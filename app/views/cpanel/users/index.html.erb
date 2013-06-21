@@ -6,7 +6,7 @@
 <table class="table table-bordered table-striped table-condensed">
   <tr class="head">
     <td class="first">Id</td>
-        <td>Login</td>
+        <td>Nickname</td>
         <td>Email</td>
     <td>Location</td>
     <td>State</td>
@@ -17,7 +17,7 @@
 <% @users.each do |user| %>
   <tr>
     <td class="first"><%= user.id %></td>
-    <td><%= user.login %></td>
+    <td><%= user.nickname %></td>
     <td><%= user.email %></td>
     <td><%= user.location %></td>
     <td><%= user.state %></td>

@@ -89,7 +89,7 @@ window.App =
     return if logins.length == 0
     $(el).atWho "@",
       data : logins
-      tpl : "<li data-value='${login}'>${login} <small>${name}</small></li>"
+      tpl : "<li data-value='${nickname}'>${nickname} <small>${name}</small></li>"
 
   initForDesktopView : () ->
     return if typeof(app_mobile) != "undefined"

@@ -1,6 +1,6 @@
 <%= simple_form_for([:cpanel,@user]) do |f| %>
   <%= render 'shared/error_messages', :target => @user %>
-  <%= f.input :login %>
+  <%= f.input :nickname %>
   <%= f.input :name %>
   <%= f.input :email, :as => :email, :input_html => { :class => "xxlarge" } %>
   <%= f.input :location %>

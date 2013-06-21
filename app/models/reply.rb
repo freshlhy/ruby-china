@@ -26,7 +26,7 @@ class Reply
   index :topic_id => 1
   
   delegate :title, :to => :topic, :prefix => true, :allow_nil => true
-  delegate :login, :to => :user, :prefix => true, :allow_nil => true
+  delegate :nickname, :to => :user, :prefix => true, :allow_nil => true
 
   validates_presence_of :body
   validates_uniqueness_of :body, :scope => [:topic_id, :user_id], :message => "不能重复提交。"

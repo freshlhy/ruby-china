@@ -35,15 +35,15 @@ class User
   field :current_sign_in_ip, :type => String
   field :last_sign_in_ip,    :type => String
 
-  field :login
-  field :name
+  field :domain
+  field :nickname
+
   field :location
   field :location_id, :type => Integer
   field :bio
   field :website
-  field :company
-  field :github
-  field :twitter
+  field :qzone
+  field :weibo
   # 是否信任用户
   field :verified, :type => Mongoid::Boolean, :default => false
   field :state, :type => Integer, :default => 1
@@ -57,7 +57,8 @@ class User
 
   mount_uploader :avatar, AvatarUploader
 
-  index :login => 1
+  index :domain => 1
+  index :nickname => 1
   index :email => 1
   index :location => 1
   index({private_token: 1},{ sparse: true })
@@ -81,9 +82,12 @@ class User
   end
 
   attr_accessor :password_confirmation
-  ACCESSABLE_ATTRS = [:name, :email_public, :location, :company, :bio, :website, :github, :twitter, :tagline, :avatar, :password, :password_confirmation]
+  ACCESSABLE_ATTRS = [:email_public, :location, :company, :bio, :website, :qzone, :weibo, :tagline, :avatar, :password, :password_confirmation]
 
-  validates :login, :format => {:with => /\A\w+\z/, :message => '只允许数字、大小写字母和下划线'}, :length => {:in => 3..20}, :presence => true, :uniqueness => {:case_sensitive => false}
+  #validates :domain, :format => {:with => /\A\w+\z/, :message => '只允许数字、大小写字母和下划线'}, :length => {:in => 3..20}, :uniqueness => {:case_sensitive => false}
+
+  validates :nickname, :format => {:with => /\A\w+\z/, :message => '只允许数字、大小写字母和下划线'}, :length => {:in => 3..20}, :presence => true, :uniqueness => {:case_sensitive => false}
+
 
   has_and_belongs_to_many :following_nodes, :class_name => 'Node', :inverse_of => :followers
   has_and_belongs_to_many :following, :class_name => 'User', :inverse_of => :followers
@@ -103,8 +107,8 @@ class User
   end
 
   def self.find_for_database_authentication(conditions)
-    login = conditions.delete(:login)
-    self.where(:login => /^#{login}$/i).first || self.where(:email => /^#{login}$/i).first
+    nickname = conditions.delete(:nickname)
+    self.where(:nickname => /^#{nickname}$/i).first || self.where(:email => /^#{nickname}$/i).first
   end
 
   def password_required?
@@ -112,14 +116,14 @@ class User
     (authorizations.empty? || !password.blank?) && super
   end
 
-  def github_url
-    return "" if self.github.blank?
-    "https://github.com/#{self.github.split('/').last}"
+  def qzone_url
+    return "" if self.qzone.blank?
+    "http://qzone.com/#{self.qzone.split('/').last}"
   end
 
-  def twitter_url
-    return "" if self.twitter.blank?
-    "https://twitter.com/#{self.twitter}"
+  def weibo_url
+    return "" if self.weibo.blank?
+    "http://weibo.com/#{self.weibo}"
   end
 
   def google_profile_url
@@ -277,8 +281,9 @@ class User
   # 只是把用户信息修改了
   def soft_delete
     # assuming you have deleted_at column added already
-    self.email = "#{self.login}_#{self.id}@ruby-china.org"
-    self.login = "Guest"
+    self.email = "#{self.nickname}_#{self.id}@ruby-china.org"
+    self.nickname = "Nickname"
+    self.domain = ""
     self.bio = ""
     self.website = ""
     self.github = ""
@@ -308,7 +313,7 @@ class User
       items = JSON.parse(json)
       items = items.collect do |a1|
         {
-          :name => a1["name"],
+          # :name => a1["name"],
           :url => a1["html_url"],
           :watchers => a1["watchers"],
           :description => a1["description"]

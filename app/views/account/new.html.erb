@@ -5,14 +5,11 @@
       <%= render "shared/error_messages", :target => resource %>
       <fieldset>
         <legend><%= t("users.register_user")%></legend>
-        <%= f.input :login, :hint => t("users.suggest_using_twitter_id") %>
-        <%= f.input :name %>
-        <%= f.input :email, :input_html => { :class => "span5", :placeholder => "foo@bar.com" } %>
-        <div class="control-group">
-          <div class="controls">
-            <label for="user_email_public" class="checkbox"><%= f.check_box :email_public, :checked => true %> 公开 Email</label>
-          </div>
-        </div>
+        
+        <%= f.input :email, :input_html => { :class => "span5", :placeholder => "请输入您的常用邮箱" } %>
+
+        <%= f.input :nickname %>
+ 
         <%= f.input :password %>
         <%= f.input :password_confirmation %>
         <div class="form-actions">

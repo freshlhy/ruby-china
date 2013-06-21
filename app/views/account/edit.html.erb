@@ -4,7 +4,6 @@
       <%= render "shared/error_messages", :target => resource if params[:by].blank? %>
       <fieldset>
         <legend><%= t("users.personal_information")%></legend>
-        <%= f.input :name %>
         <%= f.input :avatar %>
         <%= f.input :email, :input_html => { :class => "span4", :disabled => (!resource.email.blank?) } %>
         <div class="control-group">
@@ -12,28 +11,28 @@
             <label for="user_email_public" class="checkbox"><%= f.check_box :email_public %> 公开 Email</label>
           </div>
         </div>
+        <%= f.input :tagline, :input_html => { :class => "xxlarge" } %>
         <%= f.input :location, :input_html => { :class => "span3" } %>
-        <%= f.input :company, :input_html => { :class => "span3" } %>
         <div class="control-group">
-          <%= f.label :github %>
+          <%= f.label :qzone %>
           <div class="controls">
             <div class="input-prepend">
-              <span class="add-on">https://github.com/</span>
-              <%= f.text_field :github, :class => "small", :placeholder => "yourname" %>
+              <span class="add-on">https://qzone.com/</span>
+              <%= f.text_field :qzone, :class => "small" %>
             </div>
           </div>
         </div>
         <div class="control-group">
-          <%= f.label :twitter %>
+          <%= f.label :weibo %>
           <div class="controls">
             <div class="input-prepend">
-              <span class="add-on">http://twitter.com/</span>
-              <%= f.text_field :twitter, :class => "small", :placeholder => "yourname" %>
+              <span class="add-on">http://weibo.com/</span>
+              <%= f.text_field :weibo, :class => "small"%>
             </div>
           </div>
         </div>
         <%= f.input :website, :input_html => { :class => "xxlarge", :placeholder => "http://" } %>
-        <%= f.input :tagline, :input_html => { :class => "xxlarge" } %>
+        
         <%= f.input :bio, :as => :text, :input_html => { :class => "xxlarge", :rows => "6" } %>
         <div class="form-actions">
             <%= f.submit "更新资料", :class => "btn btn-primary", 'data-disable-with' => t("common.saving") %>

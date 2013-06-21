@@ -23,7 +23,7 @@ class Topic
   field :follower_ids, :type => Array, :default => []
   field :suggested_at, :type => DateTime
   # 最后回复人的用户名 - cache 字段用于减少列表也的查询
-  field :last_reply_user_login
+  field :last_reply_user_nickname
   # 节点名称 - cache 字段用于减少列表也的查询
   field :node_name
   # 删除人
@@ -51,7 +51,7 @@ class Topic
 
   counter :hits, :default => 0
   
-  delegate :login, :to => :user, :prefix => true, :allow_nil => true
+  delegate :nickname, :to => :user, :prefix => true, :allow_nil => true
   delegate :body, :to => :last_reply, :prefix => true, :allow_nil => true
 
   # scopes
@@ -111,14 +111,14 @@ class Topic
     self.replied_at = Time.now
     self.last_reply_id = reply.id 
     self.last_reply_user_id = reply.user_id
-    self.last_reply_user_login = reply.user.try(:login) || nil
+    self.last_reply_user_nickname = reply.user.try(:nickname) || nil
     self.save
   end
 
   # 删除并记录删除人
   def destroy_by(user)
     return false if user.blank?
-    self.update_attribute(:who_deleted,user.login)
+    self.update_attribute(:who_deleted,user.nickname)
     self.destroy
   end
 

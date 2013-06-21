@@ -14,7 +14,7 @@
   <tr id="comment<%= item.id %>">
     <td><%= item.commentable_type %></td>
     <td><%= item.commentable_id %></td>
-    <td><%= item.user.login if !item.user.blank? %></td>
+    <td><%= item.user.nickname if !item.user.blank? %></td>
     <td><%= item.body %></td>
     <td><%= l item.created_at, :format => :short %></td>
     <td><%= link_to '', edit_cpanel_comment_path(item), :class => "icon small_edit" %>

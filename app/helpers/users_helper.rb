@@ -1,22 +1,22 @@
 # coding: utf-8
 require "digest/md5"
 module UsersHelper
-  # 生成用户 login 的链接，user 参数可接受 user 对象或者 字符串的 login
+  # 生成用户 domain 的链接，user 参数可接受 user 对象或者 字符串的 domain
   def user_name_tag(user,options = {})
-    return "匿名" if user.blank?
+    return "匿名" if user.blank? || user.domain = nil
 
     if (user.class == "".class)
-      login = user
-      name = login
+      nickname = user
+      domain = nickname
     else
-      login = user.login
-      name = user.name
+      nickname = user.nickname
+      domain = user.domain
     end
 
-    name ||= login
-    options['data-name'] = name
+    domain ||= nickname
+    options['data-name'] = domain
 
-    link_to(login, user_path(login.downcase), options)
+    link_to(nickname, user_path(nickname.downcase), options)
   end
 
   def user_avatar_width_for_size(size)
@@ -58,7 +58,7 @@ module UsersHelper
     end
 
     if link
-      raw %(<a href="#{user_path(user.login)}">#{img}</a>)
+      raw %(<a href="#{user_path(user.nickname)}">#{img}</a>)
     else
       raw img
     end

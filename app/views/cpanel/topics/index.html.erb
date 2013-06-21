@@ -21,7 +21,7 @@
       <%= truncate(topic.title,:length => 30) %>
     </td>
     <td><%= topic.node.name if topic.node %></td>
-    <td><%= topic.user.login if topic.user %></td>
+    <td><%= topic.user.nickname if topic.user %></td>
     <td><%= topic.replies_count %></td>
     <td>
       <% if topic.deleted_at.blank? %>

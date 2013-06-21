@@ -12,7 +12,7 @@ class SessionsController < Devise::SessionsController
     resource.ensure_private_token!
     respond_to do |format|
       format.html { redirect_to after_sign_in_path_for(resource) }
-      format.json { render :status => '201', :json => resource.as_json(:only => [:login, :email, :private_token]) }
+      format.json { render :status => '201', :json => resource.as_json(:only => [:nickname, :email, :private_token]) }
     end
   end
 

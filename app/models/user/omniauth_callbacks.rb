@@ -31,14 +31,14 @@ class User
         end
         user.name = data['name']
 
-        user.login = data["nickname"]
-        user.login = data["name"] if provider == "google"
-        user.login.gsub!(/[^\w]/, "_")
+        user.nickname = data["nickname"]
+        user.nickname = data["name"] if provider == "google"
+        user.nickname.gsub!(/[^\w]/, "_")
 
         user.github = data['nickname'] if provider == "github"
 
-        if User.where(:login => user.login).exists? || user.login.blank?
-          user.login = "u#{Time.now.to_i}" # TODO: possibly duplicated user login here. What should we do?
+        if User.where(:nickname => user.nickname).exists? || user.nickname.blank?
+          user.nickname = "u#{Time.now.to_i}" # TODO: possibly duplicated user nickname here. What should we do?
         end
 
         user.password = Devise.friendly_token[0, 20]

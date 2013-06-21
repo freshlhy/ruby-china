@@ -3,7 +3,7 @@ require "digest/md5"
 module RubyChina
   module APIEntities
     class User < Grape::Entity
-      expose :id, :login
+      expose :id, :nickname
       expose(:avatar_url) do |model, opts|
         if model.avatar?
           model.avatar.url(:large)
@@ -15,7 +15,7 @@ module RubyChina
     end
 
     class DetailUser < Grape::Entity
-      expose :id, :name, :login, :email, :location, :company, :twitter, :website, :bio, :tagline, :github_url
+      expose :id, :name, :nickname, :email, :location, :company, :twitter, :website, :bio, :tagline, :github_url
       # deprecated: gravatar_hash, use avatar_url for user avatar
       expose(:gravatar_hash) { |model, opts| Digest::MD5.hexdigest(model.email || "") }
       expose(:avatar_url) do |model, opts|
@@ -32,7 +32,7 @@ module RubyChina
     end
 
     class UserTopic < Grape::Entity
-      expose :id, :title, :body, :body_html, :created_at, :updated_at, :replied_at, :replies_count, :node_name, :node_id, :last_reply_user_login
+      expose :id, :title, :body, :body_html, :created_at, :updated_at, :replied_at, :replies_count, :node_name, :node_id, :last_reply_user_nickname
     end
 
     class Reply < Grape::Entity
@@ -41,12 +41,12 @@ module RubyChina
     end
     
     class Topic < Grape::Entity
-      expose :id, :title, :created_at, :updated_at, :replied_at, :replies_count, :node_name, :node_id, :last_reply_user_id, :last_reply_user_login
+      expose :id, :title, :created_at, :updated_at, :replied_at, :replies_count, :node_name, :node_id, :last_reply_user_id, :last_reply_user_nickname
       expose :user, :using => APIEntities::User
     end
 
     class DetailTopic < Topic
-      expose :id, :title, :created_at, :updated_at, :replied_at, :replies_count, :node_name, :node_id, :last_reply_user_id, :last_reply_user_login, :body, :body_html
+      expose :id, :title, :created_at, :updated_at, :replied_at, :replies_count, :node_name, :node_id, :last_reply_user_id, :last_reply_user_nickname, :body, :body_html
       expose(:hits) { |topic| topic.hits.to_i }
       expose :user, :using => APIEntities::User
       # replies only exposed when a single topic is fetched
