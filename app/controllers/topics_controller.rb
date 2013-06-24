@@ -11,7 +11,7 @@ class TopicsController < ApplicationController
     @topics = Topic.last_actived.without_hide_nodes.fields_for_list.includes(:user).paginate(:page => params[:page], :per_page => 15, :total_entries => 1500)
     set_seo_meta("","#{Setting.app_name}#{t("menu.topics")}")
     drop_breadcrumb(t("topics.topic_list.hot_topic"))
-    
+
   end
 
   def feed
@@ -55,13 +55,13 @@ class TopicsController < ApplicationController
     @topic = Topic.without_body.find(params[:id])
     @topic.hits.incr(1)
     @node = @topic.node
-    
-    
+
+
     @per_page = Reply.per_page
     # 默认最后一页
-    params[:page] = @topic.last_page_with_per_page(@per_page) if params[:page].blank? 
+    params[:page] = @topic.last_page_with_per_page(@per_page) if params[:page].blank?
     @page = params[:page].to_i > 0 ? params[:page].to_i : 1
-    
+
     @replies = @topic.replies.unscoped.without_body.asc(:_id).paginate(:page => params[:page], :per_page => @per_page)
     if current_user
       # 找出用户 like 过的 Reply，给 JS 处理 like 功能的状态
@@ -77,8 +77,8 @@ class TopicsController < ApplicationController
     set_seo_meta("#{@topic.title} &raquo; #{t("menu.topics")}")
     drop_breadcrumb("#{@node.try(:name)}", node_topics_path(@node.try(:id)))
     drop_breadcrumb t("topics.read_topic")
-    
-    fresh_when(:etag => [@topic,@has_followed,@has_favorited,@replies,@node])    
+
+    fresh_when(:etag => [@topic,@has_followed,@has_favorited,@replies,@node])
   end
 
   def new
@@ -128,7 +128,7 @@ class TopicsController < ApplicationController
     if @topic.lock_node == false || current_user.admin?
       # 锁定接点的时候，只有管理员可以修改节点
       @topic.node_id = topic_params[:node_id]
-      
+
       if current_user.admin? && @topic.node_id_changed?
         # 当管理员修改节点的时候，锁定节点
         @topic.lock_node = true
@@ -189,7 +189,7 @@ class TopicsController < ApplicationController
     end
     set_seo_meta(t("menu.topics"))
   end
-  
+
   def topic_params
     params.require(:topic).permit(:title, :body, :node_id)
   end

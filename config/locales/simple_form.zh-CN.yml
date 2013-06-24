@@ -7,3 +7,4 @@
         favicon: '此网站的 Favicon，不填将会用 Google 来分析此网站的图标.'
       user:
         location: "请用中文填写所在城市"
+        nickname: "请输入4-24位字符：支持中文、英文、数字、连字符-和下划线_"

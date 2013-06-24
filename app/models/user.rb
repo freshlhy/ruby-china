@@ -12,7 +12,7 @@ class User
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
-  field :email,              :type => String, :default => ""
+  field :email,  :type => String, :default => ""
   # Email 的 md5 值，用于 Gravatar 头像
   field :email_md5
   # Email 是否公开
@@ -82,11 +82,28 @@ class User
   end
 
   attr_accessor :password_confirmation
-  ACCESSABLE_ATTRS = [:email_public, :location, :company, :bio, :website, :qzone, :weibo, :tagline, :avatar, :password, :password_confirmation]
+  ACCESSABLE_ATTRS = [:email, :email_public, :location, :company, :bio, :website, :qzone, :weibo, :tagline, :avatar, :password, :password_confirmation]
 
-  #validates :domain, :format => {:with => /\A\w+\z/, :message => '只允许数字、大小写字母和下划线'}, :length => {:in => 3..20}, :uniqueness => {:case_sensitive => false}
+  # validates :domain, :format => {:with => /\A\w+\z/, :message => '只允许数字、大小写字母和下划线'}, :length => {:in => 3..20}, :uniqueness => {:case_sensitive => false}
 
-  validates :nickname, :format => {:with => /\A\w+\z/, :message => '只允许数字、大小写字母和下划线'}, :length => {:in => 3..20}, :presence => true, :uniqueness => {:case_sensitive => false}
+  # before_validation :ensure_domain_has_a_value
+
+  # def ensure_domain_has_a_value
+  #   if self.domain.nil?
+  #     rand_number = rand(9999999)
+
+  #     self.domain = rand_number
+  #   end
+  # end
+
+  validates :nickname, :format => { :with => /\A[\p{Han}\p{Alnum}\-_]{0,}\z/, :message => '只允许中文、英文、数字、连字符-和下划线_' }, :presence => true, :uniqueness => {:case_sensitive => false}
+
+  validates :nickname, length: {
+    minimum:  4,
+    maximum: 24,
+    tokenizer: lambda{|s| s.encode('gb18030').bytes }
+  }
+
 
 
   has_and_belongs_to_many :following_nodes, :class_name => 'Node', :inverse_of => :followers
@@ -99,16 +116,11 @@ class User
     self.email_md5 = Digest::MD5.hexdigest(val || "")
     self[:email] = val
   end
-  
+
   def temp_access_token
     Rails.cache.fetch("user-#{self.id}-temp_access_token-#{Time.now.strftime("%Y%m%d")}") do
       SecureRandom.hex
     end
-  end
-
-  def self.find_for_database_authentication(conditions)
-    nickname = conditions.delete(:nickname)
-    self.where(:nickname => /^#{nickname}$/i).first || self.where(:email => /^#{nickname}$/i).first
   end
 
   def password_required?
@@ -118,7 +130,7 @@ class User
 
   def qzone_url
     return "" if self.qzone.blank?
-    "http://qzone.com/#{self.qzone.split('/').last}"
+    "http://user.qzone.qq.com/#{self.qzone.split('/').last}"
   end
 
   def weibo_url
@@ -140,12 +152,12 @@ class User
   def wiki_editor?
     self.admin? or self.verified == true
   end
-  
+
   # 回帖大于 150 的才有酷站的发布权限
   def site_editor?
     self.admin? or self.replies_count >= 100
   end
-  
+
   # 是否能发帖
   def newbie?
     return false if self.verified == true
@@ -232,11 +244,11 @@ class User
   def read_topic(topic)
     return if topic.blank?
     return if self.topic_read?(topic)
-    
+
     self.notifications.unread.any_of({:mentionable_type => 'Topic', :mentionable_id => topic.id},
                                      {:mentionable_type => 'Reply', :mentionable_id.in => topic.reply_ids},
                                      {:reply_id.in => topic.reply_ids}).update_all(read: true)
-    
+
     # 处理 last_reply_id 是空的情况
     last_reply_id = topic.last_reply_id || -1
     Rails.cache.write("user:#{self.id}:topic_read:#{topic.id}", last_reply_id)
@@ -330,7 +342,7 @@ class User
     random_key = "#{SecureRandom.hex(10)}:#{self.id}"
     self.update_attribute(:private_token, random_key)
   end
-  
+
   def ensure_private_token!
     self.update_private_token if self.private_token.blank?
   end

@@ -17,7 +17,7 @@
           <%= f.label :qzone %>
           <div class="controls">
             <div class="input-prepend">
-              <span class="add-on">https://qzone.com/</span>
+              <span class="add-on">http://user.qzone.qq.com/</span>
               <%= f.text_field :qzone, :class => "small" %>
             </div>
           </div>
@@ -32,7 +32,7 @@
           </div>
         </div>
         <%= f.input :website, :input_html => { :class => "xxlarge", :placeholder => "http://" } %>
-        
+
         <%= f.input :bio, :as => :text, :input_html => { :class => "xxlarge", :rows => "6" } %>
         <div class="form-actions">
             <%= f.submit "更新资料", :class => "btn btn-primary", 'data-disable-with' => t("common.saving") %>
