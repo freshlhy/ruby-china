@@ -98,13 +98,23 @@ class User
 
   validates :nickname, :format => { :with => /\A[\p{Han}\p{Alnum}\-_]{0,}\z/, :message => '只允许中文、英文、数字、连字符-和下划线_' }, :presence => true, :uniqueness => {:case_sensitive => false}
 
+  validate :nickname_is_numeric
+
   validates :nickname, length: {
     minimum:  4,
     maximum: 24,
     tokenizer: lambda{|s| s.encode('gb18030').bytes }
   }
 
+  def nickname_is_numeric 
+    if numeric?(self.nickname) 
+      errors.add(:nickname, "昵称不能为数值")
+    end
+  end
 
+  def numeric?(object)
+    true if Float(object) rescue false
+  end
 
   has_and_belongs_to_many :following_nodes, :class_name => 'Node', :inverse_of => :followers
   has_and_belongs_to_many :following, :class_name => 'User', :inverse_of => :followers
