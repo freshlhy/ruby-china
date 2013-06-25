@@ -12,7 +12,7 @@ class User
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
-  field :email,  :type => String, :default => ""
+  field :email, :type => String, :default => ""
   # Email 的 md5 值，用于 Gravatar 头像
   field :email_md5
   # Email 是否公开
@@ -35,7 +35,7 @@ class User
   field :current_sign_in_ip, :type => String
   field :last_sign_in_ip,    :type => String
 
-  field :domain
+  field :domain, :type => String
   field :nickname
 
   field :location
@@ -84,17 +84,17 @@ class User
   attr_accessor :password_confirmation
   ACCESSABLE_ATTRS = [:email, :email_public, :location, :company, :bio, :website, :qzone, :weibo, :tagline, :avatar, :password, :password_confirmation]
 
-  # validates :domain, :format => {:with => /\A\w+\z/, :message => '只允许数字、大小写字母和下划线'}, :length => {:in => 3..20}, :uniqueness => {:case_sensitive => false}
+  validates :domain, :format => {:with => /\A\w+\z/, :message => '只允许数字、大小写字母和下划线'}, :length => {:in => 4..20}, :uniqueness => {:case_sensitive => false}
 
-  # before_validation :ensure_domain_has_a_value
+  before_validation :ensure_domain_has_a_value
 
-  # def ensure_domain_has_a_value
-  #   if self.domain.nil?
-  #     rand_number = rand(9999999)
+  def ensure_domain_has_a_value
+    if self.domain.nil?
+      rand_number = rand(1000000..9999999)
 
-  #     self.domain = rand_number
-  #   end
-  # end
+      self.domain = rand_number
+    end
+  end
 
   validates :nickname, :format => { :with => /\A[\p{Han}\p{Alnum}\-_]{0,}\z/, :message => '只允许中文、英文、数字、连字符-和下划线_' }, :presence => true, :uniqueness => {:case_sensitive => false}
 

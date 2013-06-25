@@ -3,7 +3,7 @@ require "digest/md5"
 module UsersHelper
   # 生成用户 domain 的链接，user 参数可接受 user 对象或者 字符串的 domain
   def user_name_tag(user,options = {})
-    return "匿名" if user.blank? || user.domain = nil
+    return "匿名" if user.blank? 
 
     if (user.class == "".class)
       nickname = user
@@ -16,7 +16,7 @@ module UsersHelper
     domain ||= nickname
     options['data-name'] = domain
 
-    link_to(nickname, user_path(nickname.downcase), options)
+    link_to(nickname, user_path(domain), options)
   end
 
   def user_avatar_width_for_size(size)

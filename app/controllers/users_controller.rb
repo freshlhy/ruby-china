@@ -2,7 +2,7 @@
 class UsersController < ApplicationController
   before_filter :require_user, :only => "auth_unbind"
   before_filter :set_menu_active
-  before_filter :find_user, :only => [:show, :topics, :favorites,:notes]
+  before_filter :find_user, :only => [:show, :topics, :favorites, :notes]
   caches_action :index, :expires_in => 2.hours, :layout => false
 
   def index
@@ -22,19 +22,19 @@ class UsersController < ApplicationController
 
   def topics
     @topics = @user.topics.recent.paginate(:page => params[:page], :per_page => 30)
-    drop_breadcrumb(@user.nickname, user_path(@user.nickname))
+    drop_breadcrumb(@user.nickname, user_path(@user.domain))
     drop_breadcrumb(t("topics.title"))
   end
 
   def favorites
     @topics = Topic.where(:_id.in => @user.favorite_topic_ids).paginate(:page => params[:page], :per_page => 30)
-    drop_breadcrumb(@user.nickname, user_path(@user.nickname))
+    drop_breadcrumb(@user.nickname, user_path(@user.domain))
     drop_breadcrumb(t("users.menu.favorites"))
   end
   
   def notes
     @notes = @user.notes.published.recent.paginate(:page => params[:page], :per_page => 30)
-    drop_breadcrumb(@user.nickname, user_path(@user.nickname))
+    drop_breadcrumb(@user.nickname, user_path(@user.domain))
     drop_breadcrumb(t("users.menu.notes"))
   end
 
@@ -74,12 +74,12 @@ class UsersController < ApplicationController
   protected
   def find_user
     # 处理 nickname 有大写字母的情况
-    if params[:id] != params[:id].downcase
-      redirect_to request.path.downcase, :status => 301
-      return
-    end
+    # if params[:id] != params[:id].downcase
+    #   redirect_to request.path.downcase, :status => 301
+    #   return
+    # end
 
-    @user = User.where(:nickname => /^#{params[:id]}$/i).first
+    @user = User.where(:domain => /^#{params[:id]}$/i).first
     render_404 if @user.nil?
   end
 

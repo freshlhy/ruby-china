@@ -11,11 +11,11 @@
   <li class="dropdown" id="user_menu">
     <%= link_to(raw("#{current_user.nickname} <b class='caret'></b>"), "#user_menu", :class => "dropdown-toggle", "data-toggle" => "dropdown") %>
     <%= render_list :class => "dropdown-menu" do |li|
-      li << link_to(t("menu.my_home_page"), user_path(current_user.nickname) )
+      li << link_to(t("menu.my_home_page"), user_path(current_user.domain) )
       unless params[:controller].match(/cpanel/)
         li << link_to(t("menu.edit_account_path"), edit_user_registration_path)
         li << link_to(t("menu.notes"), notes_path )
-        li << link_to(t("menu.likes"), favorites_user_path(current_user.nickname))
+        li << link_to(t("menu.likes"), favorites_user_path(current_user.domain))
         li << link_to(t("menu.cpanel"), "/cpanel") if admin?
       end
       li << link_to(t("common.logout"), destroy_user_session_path, method: "delete" )
